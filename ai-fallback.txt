@@ -1,0 +1,123 @@
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/veniceai?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/veniceai?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Halo! Ada yang bisa saya bantu hari ini?"
+}
+
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/powerbrainai?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/powerbrainai?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hello! How can I assist you today?"
+}
+
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/perplexityai?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/perplexityai?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "\"Hai\" in Italian is the **second person singular present indicative form of the verb \"avere\" (to have)**, used with \"tu\" (you). It means \"you have\" and is commonly used to indicate possession, states, or age, for example, \"Hai un libro?\" (Do you have a book?) or \"Quanti anni hai?\" (How old are you?).\n\nThe letter **\"h\" in \"hai\"** is silent and is used only in writing to distinguish it from other homophones like \"ai\" (a preposition). This distinction is important because \"hai\" is a verb form, while \"ai\" is a contraction of \"a\" + \"i\" (to the).\n\nIn summary, **\"hai\" means \"you have\" and is a fundamental verb form in Italian grammar.**"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/luminai?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/luminai?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hai! 👋 Bagaimana saya bisa membantu Anda hari ini?\n\nApakah Anda mencari informasi, ingin tahu tentang sesuatu, atau ada hal lain yang ingin Anda lakukan?"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/gemini?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/gemini?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hai! Ada yang bisa saya bantu?"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/feloai?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/feloai?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "It seems like you're using \"hai,\" which can have different meanings depending on the context. Here are a few interpretations:\n\n- **Interjection**: In South India and Sri Lanka, \"hai\" is often used as an expression of astonishment, dismay, or sympathy. \n\n- **Cultural References**: \"HAI\" can also refer to various organizations or concepts, such as the Stanford HAI (Human-Centered AI) which focuses on innovative AI research.\n\n- **Culinary Context**: There are several restaurants named \"Hai,\" particularly those offering Chinese cuisine, such as Hai Authentic Chinese, which serves a variety of traditional dishes.\n\nIf you have a specific context or meaning in mind for \"hai,\" please let me know, and I can provide more detailed information!"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/copilot?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/copilot?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hello! How can I assist you today?"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/chatgpt?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/chatgpt?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hello! How can I assist you today?"
+}
+
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/biblegpt?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/biblegpt?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": "Hello! How can I assist you today?"
+}
+
+linkREQUEST URL content_copy
+https://api.elrayyxml.web.id/api/ai/alisia?text=hai
+terminalCURL COMMAND content_copy
+curl -X GET "https://api.elrayyxml.web.id/api/ai/alisia?text=hai"
+storageSERVER RESPONSE content_copy
+{
+  "status": true,
+  "author": "ElrayyXml",
+  "result": {
+    "status": 200,
+    "data": {
+      "refined_results": "Hai! Semoga hari Anda baik. Ada yang bisa saya bantu atau ingin ngobrol?",
+      "results": []
+    },
+    "resources": {},
+    "message": "Search completed successfully."
+  }
+}
+
+
+
