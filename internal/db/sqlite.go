@@ -563,6 +563,28 @@ func (db *DB) GetActiveGroups() []TrackedGroup {
 	return groups
 }
 
+// DisableAllGroups disables summarization for all groups
+func (db *DB) DisableAllGroups() (int64, error) {
+	logger.Info("Disabling summary for ALL groups")
+	
+	query := `
+		UPDATE tracked_groups 
+		SET is_active = 0`
+	
+	result, err := db.conn.Exec(query)
+	if err != nil {
+		return 0, fmt.Errorf("failed to disable all groups: %w", err)
+	}
+	
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("failed to get rows affected: %w", err)
+	}
+	
+	logger.Info("✅ Summary disabled for %d groups", rowsAffected)
+	return rowsAffected, nil
+}
+
 // GetGroupMessageCount24h gets message count for a group in last 24 hours
 func (db *DB) GetGroupMessageCount24h(chatID int64) int {
 	query := `

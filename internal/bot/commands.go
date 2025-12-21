@@ -133,6 +133,7 @@ func (h *CommandHandler) buildListGroupsResponse(page int) (string, tgbotapi.Inl
 	response.WriteString("*Commands:*\n")
 	response.WriteString("`/enable <chat_id>` - Enable summarization\n")
 	response.WriteString("`/disable <chat_id>` - Disable summarization\n")
+	response.WriteString("`/disableall` - Disable ALL groups\n")
 	response.WriteString("`/groupstats` - Show detailed statistics")
 	
 	// Create inline keyboard for navigation
@@ -284,6 +285,40 @@ func (h *CommandHandler) HandleDisableGroup(message *tgbotapi.Message, args []st
 	}
 	response += "This group will NOT be summarized.\n"
 	response += "Messages will still be saved for later."
+	
+	h.bot.sendMessage(message.Chat.ID, response)
+}
+
+// HandleDisableAllGroups handles /disableall command
+func (h *CommandHandler) HandleDisableAllGroups(message *tgbotapi.Message) {
+	logger.Info("Handling /disableall command from user %d", message.From.ID)
+	
+	// Get current active groups count
+	activeGroups := h.database.GetActiveGroups()
+	activeCount := len(activeGroups)
+	
+	if activeCount == 0 {
+		h.bot.sendMessage(message.Chat.ID, "ℹ️ No active groups to disable.\n\nAll groups are already inactive.")
+		return
+	}
+	
+	// Disable all groups
+	rowsAffected, err := h.database.DisableAllGroups()
+	if err != nil {
+		logger.Error("Failed to disable all groups: %v", err)
+		h.bot.sendMessage(message.Chat.ID, "❌ Failed to disable all groups. Check logs.")
+		return
+	}
+	
+	response := fmt.Sprintf("✅ *Successfully disabled ALL groups*\n\n")
+	response += fmt.Sprintf("• Groups affected: %d\n", rowsAffected)
+	response += fmt.Sprintf("• Previously active: %d\n\n", activeCount)
+	response += "🔕 *All auto-summaries are now STOPPED*\n\n"
+	response += "No groups will be summarized until you enable them again.\n"
+	response += "Messages will still be saved for later.\n\n"
+	response += "To re-enable groups:\n"
+	response += "`/enable <chat_id>` - Enable specific group\n"
+	response += "`/listgroups` - View all groups"
 	
 	h.bot.sendMessage(message.Chat.ID, response)
 }

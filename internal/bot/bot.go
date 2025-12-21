@@ -137,6 +137,11 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) {
 			b.commandHandler.HandleDisableGroup(message, args)
 			return
 		}
+	case "disableall":
+		if b.commandHandler != nil {
+			b.commandHandler.HandleDisableAllGroups(message)
+			return
+		}
 	case "groupstats":
 		if b.commandHandler != nil {
 			b.commandHandler.HandleGroupStats(message)
@@ -188,18 +193,28 @@ func (b *Bot) handleHelpCommand(message *tgbotapi.Message) string {
 	
 	response := `📚 *Available Commands:*
 
+*Group Management:*
+/listgroups - View all tracked groups
+/enable <chat_id> - Enable auto-summary for a group
+/disable <chat_id> - Disable auto-summary for a group
+/disableall - Disable ALL groups at once
+/groupstats - Show detailed group statistics
+
+*Summary Commands:*
+/summary <chat_id> - Generate on-demand summary
+/summary <chat_id> 4h - Last 4 hours summary
+/summary <chat_id> daily - Today's summary
+
+*General:*
 /start - Introduction and welcome message
 /help - Show this help message
-/summary - Generate summary on demand (coming soon)
-/summary_4h - Last 4 hours summary (coming soon)
-/summary_today - Today's summary (coming soon)
-/stats - Show group statistics (coming soon)
 
 *How it works:*
 1. Add bot to your group
 2. Bot records all messages
-3. Automatic summaries every 4 hours
-4. Daily summary at 23:59
+3. Enable group with /enable <chat_id>
+4. Automatic summaries every 4 hours
+5. Daily summary at 23:59
 
 *Privacy:*
 All messages are stored locally in SQLite database.
