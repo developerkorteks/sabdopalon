@@ -4,7 +4,7 @@
 .env.*.local
 
 # Session file (contains login credentials)
-session.json
+# session.json
 
 # Database
 *.db
