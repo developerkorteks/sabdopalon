@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 	"telegram-summarizer/internal/client"
 	"telegram-summarizer/internal/config"
 	"telegram-summarizer/internal/db"
@@ -73,6 +74,37 @@ func main() {
 		logger.Info("\n\n🛑 Shutting down gracefully...")
 		cancel()
 	}()
+	
+	// Add connection timeout monitor
+	connectionTimeout := 60 * time.Second
+	connectedCh := make(chan bool, 1)
+	
+	go func() {
+		select {
+		case <-time.After(connectionTimeout):
+			if len(connectedCh) == 0 {
+				logger.Error("\n❌ CONNECTION TIMEOUT after %v", connectionTimeout)
+				logger.Error("The client couldn't connect to Telegram servers.")
+				logger.Error("")
+				logger.Error("Possible issues:")
+				logger.Error("  1. Network/firewall blocking Telegram")
+				logger.Error("  2. VPS region restrictions")
+				logger.Error("  3. Session file corruption")
+				logger.Error("")
+				logger.Error("Solutions:")
+				logger.Error("  • Remove session: rm session.json")
+				logger.Error("  • Check network: curl https://api.telegram.org")
+				logger.Error("  • Try different DC in code (change DC: 2 to DC: 4)")
+				logger.Error("  • Use proxy/VPN")
+				logger.Error("  • Read: cat TROUBLESHOOTING_SCRAPER.md")
+				logger.Error("")
+				cancel()
+			}
+		case <-connectedCh:
+			// Connection successful, stop monitoring
+			return
+		}
+	}()
 
 	// Create client
 	logger.Info("\n📱 Initializing Telegram Client...")
@@ -107,7 +139,22 @@ func main() {
 	// Start client
 	logger.Info("🚀 Starting client...\n")
 	
-	if err := telegramClient.Start(ctx); err != nil {
+	// Run client in goroutine to detect successful connection
+	errCh := make(chan error, 1)
+	go func() {
+		errCh <- telegramClient.Start(ctx)
+	}()
+	
+	// Wait for either error or timeout
+	err = <-errCh
+	
+	// Signal successful connection (if no error before timeout)
+	select {
+	case connectedCh <- true:
+	default:
+	}
+	
+	if err != nil {
 		if err == context.Canceled {
 			logger.Info("\n✅ Client stopped successfully")
 		} else {

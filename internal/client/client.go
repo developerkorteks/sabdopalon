@@ -48,24 +48,33 @@ func NewClient(cfg Config) *Client {
 // Start initializes and starts the client
 func (c *Client) Start(ctx context.Context) error {
 	logger.Info("🚀 Starting Telegram Client (gotd/td)...")
+	logger.Info("📡 Connecting to Telegram servers...")
+	logger.Info("⏳ This may take 10-30 seconds on first connection...")
 	
 	// Session storage
 	sessionStorage := &session.FileStorage{
 		Path: filepath.Join(c.sessionDir, "session.json"),
 	}
 	
-	// Create client with update handler
+	// Create client with update handler and options
 	client := telegram.NewClient(c.appID, c.appHash, telegram.Options{
 		SessionStorage: sessionStorage,
 		UpdateHandler: telegram.UpdateHandlerFunc(func(ctx context.Context, u tg.UpdatesClass) error {
 			return c.handleUpdate(ctx, u)
 		}),
+		// Use DC2 (Singapore) - closer to Indonesia
+		DC: 2,
 	})
 	
 	c.client = client
 	
+	logger.Info("🔌 Client initialized, attempting to connect...")
+	
 	// Start client
 	return client.Run(ctx, func(ctx context.Context) error {
+		logger.Info("✅ Connection established!")
+		logger.Info("🔐 Starting authentication...")
+		
 		// Get API
 		c.api = client.API()
 		
