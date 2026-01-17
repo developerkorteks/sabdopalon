@@ -13,11 +13,15 @@ all: clean build
 
 # Build the unified binary
 build:
+	# @echo "🔨 Building $(BINARY_NAME)..."
+	# @mkdir -p $(BIN_DIR)
+	# @go build $(BUILD_FLAGS) -o $(BIN_DIR)/$(BINARY_NAME) $(CMD_DIR)/main.go
+	# @echo "✅ Build complete: $(BIN_DIR)/$(BINARY_NAME)"
+	# @ls -lh $(BIN_DIR)/$(BINARY_NAME)
 	@echo "🔨 Building $(BINARY_NAME)..."
 	@mkdir -p $(BIN_DIR)
-	@go build $(BUILD_FLAGS) -o $(BIN_DIR)/$(BINARY_NAME) $(CMD_DIR)/main.go
+	@GOMAXPROCS=1 CGO_ENABLED=1 go build -p 1 $(BUILD_FLAGS) -o $(BIN_DIR)/$(BINARY_NAME) $(CMD_DIR)/main.go
 	@echo "✅ Build complete: $(BIN_DIR)/$(BINARY_NAME)"
-	@ls -lh $(BIN_DIR)/$(BINARY_NAME)
 
 # Build old binaries (deprecated, for backup)
 build-old:
