@@ -375,9 +375,11 @@ func (h *CommandHandler) HandleSummary(message *tgbotapi.Message, args []string)
 		uniqueUsers[msg.UserID] = msg.Username
 	}
 	
-	// Progress callback to send updates to user
+	// Progress callback to send updates to user (without Markdown to avoid parsing errors)
 	progressCallback := func(progressMsg string) {
-		h.bot.sendMessage(message.Chat.ID, progressMsg)
+		msg := tgbotapi.NewMessage(message.Chat.ID, progressMsg)
+		// Do NOT set ParseMode for progress messages
+		h.bot.GetAPI().Send(msg)
 	}
 	
 	// Summary callback to send partial summaries
@@ -399,7 +401,8 @@ func (h *CommandHandler) HandleSummary(message *tgbotapi.Message, args []string)
 	}
 	
 	// Send completion message (already formatted by formatter)
-	h.bot.sendMessage(message.Chat.ID, summary)
+	// Use sendMessageWithoutHeader to avoid Markdown parsing errors
+	h.sendMessageWithoutHeader(message.Chat.ID, summary)
 	
 	// Parse metadata from summary (use raw summary text without formatting)
 	parser := h.bot.summarizer.GetMetadataParser()
@@ -608,15 +611,19 @@ func (h *CommandHandler) sendMessageWithAutoSplit(chatID int64, text string) {
 
 // sendMessageWithoutHeader sends a message without adding "Part X/Y" header
 // Used for formatted summaries that already have their own headers
+// Note: ParseMode is disabled to prevent Markdown parsing errors from AI-generated content
 func (h *CommandHandler) sendMessageWithoutHeader(chatID int64, text string) {
 	const maxLength = 4000 // Leave some margin under 4096
 	
 	if len(text) <= maxLength {
-		// Send as single message
+		// Send as single message WITHOUT ParseMode to avoid Markdown errors
 		msg := tgbotapi.NewMessage(chatID, text)
+		// Do NOT set ParseMode - summaries may contain malformed Markdown from AI
 		if _, err := h.bot.GetAPI().Send(msg); err != nil {
 			logger.Error("Failed to send message: %v", err)
-			h.bot.sendMessage(chatID, "❌ Failed to send summary.")
+			// Try to send error message without Markdown
+			errorMsg := tgbotapi.NewMessage(chatID, "❌ Failed to send summary. The content may contain formatting issues.")
+			h.bot.GetAPI().Send(errorMsg)
 		}
 		return
 	}
@@ -628,6 +635,7 @@ func (h *CommandHandler) sendMessageWithoutHeader(chatID int64, text string) {
 	
 	for i, chunk := range chunks {
 		msg := tgbotapi.NewMessage(chatID, chunk)
+		// Do NOT set ParseMode - summaries may contain malformed Markdown from AI
 		if _, err := h.bot.GetAPI().Send(msg); err != nil {
 			logger.Error("Failed to send part %d/%d: %v", i+1, len(chunks), err)
 			continue
